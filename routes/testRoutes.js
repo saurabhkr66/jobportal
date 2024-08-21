@@ -3,7 +3,7 @@ import { testPostControllers } from '../controllers/testController.js';
 
 const router=express.Router();
 
-router.post('/test',testPostControllers)
+router.post('/test-post',testPostControllers)
 
 
 export default router;
