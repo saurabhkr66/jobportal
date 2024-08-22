@@ -6,7 +6,7 @@ const userSchema= new mongoose.Schema({
     required:[true,'Name is required']
    },
    lastName:{
-    type:String,required:[true,'Last name is required'],
+    type:String,
 
    },
    email:{
@@ -17,16 +17,15 @@ const userSchema= new mongoose.Schema({
    },password:{
     type:String,
     required:[true,'Password is required'],
-    minlength:8,
-    validate: {
-      validator: (v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(v),
-      message: 'Password must contain at least 8 characters, including uppercase and lowercase letters, numbers, and special characters',
-    },
+    minlength:[6,'length should be 6 charcter']
+  },
+    
+    
     location:{
         type:String,
         default:'hilsa',
     }
-   }
-})
+   
+},{timestamps:true})
 
 export default mongoose.model("User",userSchema);

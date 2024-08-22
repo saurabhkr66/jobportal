@@ -4,7 +4,8 @@ import connectdb from './config/db.js';
 import testRoutes from './routes/testRoutes.js'
 import cors from 'cors'
 import morgan from 'morgan';
-
+import authRoutes from './routes/authRoutes.js'
+import errorMidleware from './middlewares/errormiddleware.js';
 
 
 
@@ -20,7 +21,9 @@ app.use(morgan("dev"));
 
 
 app.use("/api/v1/test", testRoutes);
+app.use("/api/v1/auth",authRoutes);
 
+app.use(errorMidleware);
 
 const PORT=process.env.PORT ||8080
 app.listen(PORT,()=>{
