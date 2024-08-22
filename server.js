@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv'
+import 'express-async-error'
 import connectdb from './config/db.js';
 import testRoutes from './routes/testRoutes.js'
 import cors from 'cors'

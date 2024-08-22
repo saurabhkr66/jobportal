@@ -5,13 +5,13 @@ try {
     const {name,email,password}=req.body;
 
     //validation
-    if(!name){
-        next('name is required');
+    // if(!name){
+    //     next('name is required');
 
-    }
-    if(!email && !password){
-        next('email or password is required');
-    }
+    // }
+    // if(!email && !password){
+    //     next('email or password is required');
+    // }
     const existinguser = await userModel.findOne({email});
     if(existinguser){
         next('"email already exists"');
