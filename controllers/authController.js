@@ -17,11 +17,12 @@ try {
         next('"email already exists"');
     }
 
-    const user=await userModel.create({name,email,password})
+    const user=await userModel.create({name,email,password});
+    const token=user.createJWT();
     res.status(201).send({
         success: true,
         message:'User registered successfully',
-        user
+        user,token
     })
 
 } catch (error) {
