@@ -22,11 +22,40 @@ try {
     res.status(201).send({
         success: true,
         message:'User registered successfully',
-        user,token
+        user:{
+            name:user.name,
+            lastName:user.lastName,
+            email:user.email,
+            location:user.location,
+            
+        },
+        token
     })
 
 } catch (error) {
    next(error)
     
 }
+}
+export const loginController = async(req, res) =>{
+const {email,password} = req.body
+
+if(!email ||!password){
+    next('please enter email or password')
+}
+const user= await userModel.findOne({email})
+if(!user){
+    next('invalid username or passowrd')
+
+}
+const isMatch =await user.comparePassword(password)
+if(!isMatch){
+    next('invalid username or password')
+}
+const token=user.createJWT();
+res.status(200).json({
+    success:true,
+    message:'login Successfully',
+    user,token
+})
 }
