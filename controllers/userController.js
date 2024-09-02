@@ -14,10 +14,10 @@ user.email=email
 user.lastName=lastName
 user.location=location
 
-await user.save()
-const token=user.createJWT()
+await user.save();
+const token=user.createJWT();
 res.status(200).json({
-    user,token
+    user,token,
 });
 
 }

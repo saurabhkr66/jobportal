@@ -16,7 +16,7 @@ const errorMidleware=(err,req,res,next)=>{
      if(err.name==='validation error'){
         defaultErrors.statusCode=400
         defaultErrors.message=Object.values(err.errors)
-        .map(item=>item.message)
+        .map((item)=>item.message)
         .join(',');
 
      }
