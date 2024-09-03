@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const jobSchema=new mongoose.Schema({
-   comany:{
+   company:{
     type:String,
     required:[true,'company name is required'],
    },
@@ -20,7 +20,7 @@ const jobSchema=new mongoose.Schema({
     default:'full-time'
    },worklocation:{
     type:String,
-    required:[true,'work location is required'],
+    
    },
    createdBy:{
     type:mongoose.Types.ObjectId,
