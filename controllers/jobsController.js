@@ -1,5 +1,6 @@
 import jobsModels from "../models/jobsModels.js";
-
+import mongoose, { startSession } from "mongoose";
+import moment from "moment";
 export const createJobController=async(req,res,next)=>{
 const {company,position}=req.body;
 
@@ -54,7 +55,52 @@ export const deletejobController=async(req,res,next)=>{
     next('you are not authrize to delete this ')
     return
    }
-   await job.deleteOne();
+   await job.deleteOne()
    res.status(200).json({message:"job deleted successfully"})
 
+}
+export const getJobStatsController=async(req,res,next)=>{
+    const stats=await jobsModels.aggregate([
+        {
+            $match:{
+                createdBy:new mongoose.Types.ObjectId(req.user.userId)
+            }
+            
+        },{
+            $group:{
+                _id:`$status`,
+                count:{$sum:1},
+            }
+        }
+    ])
+    const defaultstats={
+        pending:stats.pending ||0,
+        reject:stats.reject||0,
+        interview:stats.interview||0
+    }
+    let monthlyApplication=await jobsModels.aggregate([
+        {
+            $match:{
+                createdBy:new mongoose.Types.ObjectId(req.user.userId)
+
+            }
+        },{
+            $group:{
+                _id:{
+                    year:{$year:'$createdAt'},
+                    month:{$month:'$createdAt'}
+                },
+                count:{
+                    $sum:1,
+                }
+
+            }
+        }
+    ])
+    monthlyApplication=monthlyApplication.map(item=>{
+        const{_id:{year,month},count}=item
+        const date=moment().month(month-1).year(year).format('MMM Y')
+        return {date,count}
+    })
+    res.status(200).json({totalJob:stats.length,stats,defaultstats,monthlyApplication})
 }
