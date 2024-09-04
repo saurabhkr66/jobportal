@@ -9,6 +9,9 @@ import authRoutes from './routes/authRoutes.js'
 import errorMidleware from './middlewares/errormiddleware.js';
 import userRoutes from './routes/userRoutes.js'
 import jobRoutes from './routes/jobRoutes.js'
+import helmet from 'helmet';
+import xss from 'xss-clean';
+import ExpressMongoSanitize from 'express-mongo-sanitize';
 
 
 dotenv.config();
@@ -16,7 +19,9 @@ connectdb();
 
 const app = express();
 
-
+app.use(helmet());
+app.use(xss());
+app.use(ExpressMongoSanitize());
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));

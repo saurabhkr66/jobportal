@@ -13,10 +13,52 @@ const job=await jobsModels.create(req.body);
 res.status(201).json({job});
 };
 export const getAllJobsController=async(req,res,next)=>{
-   const jobs=await jobsModels.find({createdBy:req.user.userId})
+   const {status,workType,search,sort}=req.query
+   const queryObject={
+    createdBy:req.user.userId
+   }
+   //status and workType filter
+   if(status && status!== 'all'){
+    queryObject.status=status
+   }
+   if(workType && workType!=='all'){
+    queryObject.workType=workType
+   }
+   //search
+   if(search){
+    queryObject.position={$regex:search,$options:'i'}
+   }
+
+   let queryResult=jobsModels.find(queryObject)
+   //sort by position and date
+   if(sort==='latest'){
+    queryResult=queryResult.sort("-createdAt")
+   }
+   if(sort==='oldest'){
+    queryResult=queryResult.sort("createdAt")
+   }
+   if(sort==='a-z'){
+    queryResult=queryResult.sort("position")
+   }
+   if(sort==='z-a'){
+    queryResult=queryResult.sort("-position")
+   }
+  //pagination
+   const page=Number(req.query.page)||1;
+   const limit=Number(req.query.limit)||10;
+   const skip=(page-1)*limit;
+
+   queryResult=queryResult.skip(skip).limit(limit);
+
+
+   //job count
+   const totaljob=await jobsModels.countDocuments(queryResult)
+   const nofpage=Math.ceil(totaljob/limit)
+    const jobs=await queryResult
    res.status(200).json({
-    totaljobs:jobs.length,
-    jobs
+    totaljob,
+    jobs,
+    nofpage
 
    })
 }
