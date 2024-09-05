@@ -29,7 +29,8 @@ info:{
 },
 servers:[
     {
-        url:"http://localhost:8080"
+              url:"https://jobportal-2936.onrender.com"
+
     }
 ]
 },
